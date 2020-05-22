@@ -1,7 +1,7 @@
 # graphics.py
 """Simple object oriented graphics library  
 
-The library is designed to make it very easy for novice programmers to
+The library is designed to make it very easy for novice programmars to
 experiment with computer graphics in an object oriented fashion. It is
 written by John Zelle for use with the book "Python Programming: An
 Introduction to Computer Science" (Franklin, Beedle & Associates).

@@ -1,20 +1,20 @@
-import grammer.grammerTxtParser as parser
+import grammar.grammarTxtParser as parser
 
-import grammer.semantics.functionList as fList
-import grammer.semantics.variableList as vList
-import grammer.semantics.semanticList as sList
-import grammer.semantics.a as a
-import grammer.semantics.add as add
-import grammer.semantics.sub as sub
-import grammer.semantics.mult as mult
-import grammer.semantics.div as div
-import grammer.semantics.default as default
+import grammar.semantics.functionList as fList
+import grammar.semantics.variableList as vList
+import grammar.semantics.semanticList as sList
+import grammar.semantics.a as a
+import grammar.semantics.add as add
+import grammar.semantics.sub as sub
+import grammar.semantics.mult as mult
+import grammar.semantics.div as div
+import grammar.semantics.default as default
 
 
 
-p = parser.GrammerTxtParser
+p = parser.GrammarTxtParser
 
-g = p.parseTxt("data/testGrammer.txt")
+g = p.parseTxt("data/testGrammar.txt")
 print(g)
 
 f = fList.FunctionList({'+':add.Add(), '-':sub.Sub(), '*':mult.Mult(), '/':div.Div(), 'a':a.A(), "DEFAULT":default.CombineStrings()})
