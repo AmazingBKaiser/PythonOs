@@ -1,0 +1,23 @@
+#syntax
+add
+add = mul add§|add§|mul
+add! = minus mul add!|minus mul|minus add!|plus mul add!|plus mul|plus add!
+
+mul = term mul!|term
+mul! = times term mul!
+mul! = divide term mul!
+
+plus = '+'
+minus = '-'
+times = '*'
+divide = '/'
+
+term = num
+term = '(' add ')'
+
+num = '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'|num num
+
+
+#semantics
+add=operation(2)
+mul=operation(2)

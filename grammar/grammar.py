@@ -29,38 +29,47 @@ class Grammar:
         return (None, None)
 
     def getSymbolRule(self, symbol):
-        for r in reversed(self.rules):
+        #for r in reversed(self.rules):
+        for r in self.rules:
             for s in r.nextSymbols:
-                if s.symbol in symbol:
+                if s.symbol in symbol and symbol.replace(s.symbol, r.symbol) != symbol:
+                    #print(symbol.replace(s.symbol, r.symbol), symbol, s.symbol, r.symbol)
                     return (r.symbol, s.symbol)
         return (None, None)
 
     def calcSymbol(self, symbol):
-        tree = self.buildTree(symbol)
         print(symbol)
-        return self.calc(tree.root, [])[0]
+        tree = self.buildTree(symbol)
+        return self.calc(tree.root, [])[0][0]
 
     def calc(self, node, stack):
-        symbol = "DEFAULT"
-        op, tmp = self.getSemanticRuleWithSymbol(symbol, symbol)
+        op = None
 
+        int_push_count = 0
         for a in node.children:
             if a.children == []:
                 stack.append(a.value.symbol)
+                int_push_count += 1
             else:
                 o, s = self.getSemanticRuleWithSymbol(a.value.symbol, a.children[0].value.symbol)
                 if o !=  None:
                     op = o
                     symbol = s
                 else:
-                    stack = self.calc(a, stack)
+                    stack, int_tmp = self.calc(a, stack)
+                    int_push_count += int_tmp
 
-        operands = stack[-op.operands:]
-        stack = stack[:-op.operands]
-        r = self.semanticList.call(op.func, symbol, operands)
-        print(stack, operands, r)
+        if op != None:
+            operands = stack[-op.operands:]
+            stack = stack[:-op.operands]
+            r = self.semanticList.call(op.func, symbol, operands)
+        else:
+            operands = stack[-int_push_count:]
+            stack = stack[:-int_push_count]
+            r = "".join([str(a) for a in operands])
+        #print(node.value.symbol, " : ", stack, operands, r, int_push_count)
         stack.append(r)
-        return stack
+        return (stack, int_push_count)
 
 
     def buildTree(self, str_symbol):
@@ -89,7 +98,7 @@ class Grammar:
                 break
 
             l, result, str_text = Grammar.findAllSubStrings(str_line, str_replaced, str_result)
-
+            print(result, l, str_text, str_replaced, str_result)
             for r in result:
                 l2 = -1
                 r2 = 0
@@ -115,15 +124,15 @@ class Grammar:
     def findAllSubStrings(str_text, str_find, str_replacer):
         l = len(str_find)
         result = []
-        for i in range(0, len(str_text)-l+1):
-            if i > len(str_text)-l+1:
+        for i in range(0, 10000):
+            if i+l > len(str_text):
                 break
             #print(i, str_text[i:i+l] + "==" + str_find)
             if str_text[i:i+l] == str_find:
                 result.append(i)
                 str_new = str_text[:i]
                 str_new += str_replacer
-                if i <= len(str_text)-l:
+                if i+l < len(str_text):
                     str_new += str_text[i+l:]
                 str_text = str_new
                 #str_text[i:i+l] = [s for s in str_replacer]
